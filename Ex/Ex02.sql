@@ -166,13 +166,13 @@ from employees
 order by hire_date asc;
 
 
-#data라고 별명으로 쓴건 식에 못쓴다. 4교시 12:50분쯤 다시 들어보기
+#data라고 별명으로 쓴건 식에 못쓴다. 작동하는 순서가 from->where-> select -> order by이라 date로 주면 위에 hire_date가 만들어지기 전이라 별명으로 쓰기 어렵다. 
 select first_name,
         hire_date date,
         department_id
 from employees
 where hire_date >= '2007-01-01'
-order by date asc;
+order by date asc; -- 얘는 select문 다음으로 작동되기 때문에 여기선 쓸 수 있다.
 
 /********************************************************************
 * 2일차 수업
@@ -254,7 +254,7 @@ from dual;
 select concat('안녕','하세요')
 	from dual;
     
-select concat('안녕',' ' ,'하세요') -- 쌍따옴표도 가능. 안에 기호 넣을때 "''"해야 작은 따옴표를 인식 가능. '""'는 알아서 인식가능. 바꿔쓰거나 섞어쓸때도 있따. 
+select concat('안녕',' ' ,'하세요') -- 쌍따옴표도 가능. 안에 기호 넣을때 "''"해야 작은 따옴표를 인식 가능. '""'는 알아서 인식가능. 바꿔쓰거나 섞어쓸때도 있다. 
 from dual;
 
 select concat(first_name, last_name)
@@ -295,7 +295,7 @@ select 	length('a')
 from dual;
 
 
-select 	length('가')
+select 	length('가') -- 값이 다르게 나옴. 바이트를 나타냄. 영어만 쓰는 문화권이면 상관없지만 우리는 섞어쓰기때문에 글자 길이 나타내려면 밑에 2개를 쓰는게 낫다.
         ,char_length('가')
         ,character_length('가')
 from dual;
@@ -402,11 +402,11 @@ from dual;
 -- FORMAT(숫자, p): 숫자에 콤마(,) 를 추가, 소수점 p자리까지 출력
 select  format(1234567.89, 2),
 		format(1234567.89, 0),
-        format(1234567.89, -2)
+        format(1234567.89, -5) -- 0이랑 똑같음.
 from dual;
 
 -- ifnull() 값이 null일때 기본값 세팅
-select first_name, ifnull(commission_pct, 0)
+select first_name, ifnull(commission_pct, 0) -- ifnull(commission_pct, '없음') 없음은 별로 좋지 않음. 하나는 숫자고, 하나는 글자가 되어버리기 때문에 나중에 자바에서 값을 담을때 혼란
 from employees;
 
 
