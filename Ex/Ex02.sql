@@ -1,3 +1,7 @@
+/***************************************************************************
+* 복습
+****************************************************************************/
+
 select *
 from employees;
 
@@ -80,14 +84,14 @@ where salary between 13000 and 15000;
 select * 
 from employees
 where commission_pct is null ;
-
 #주의 where commision_pct = null 
 
 
 
 #커미션비율이 있는 사원의 이름과 월급 커미션비율을 출력하세요
 select first_name
-	commission_pct
+		,salary
+		,commission_pct
 from employees
 where commission_pct is not null ;
 
@@ -101,7 +105,7 @@ and  commission_pct is null;
 
 #부서가 없는 직원의 이름과 월급을 출력하세요
 select first_name,
-	salary
+		salary
 from employees
 where department_id is null ;
 
@@ -212,8 +216,10 @@ select first_name
 from employees
 order by salary desc;   
 
+-- Power(숫자, n),  Pow(숫자, n):숫자의 n승
 select pow(12,2), power(12,2);
 
+-- Sqrt(숫자): 숫자의 제곱근
 select sqrt(144);
 
 -- sign(숫자): 숫자가 음수이면 -1, 0이면 0, 양수이면 1
@@ -238,7 +244,13 @@ select employee_id
 		,greatest(employee_id, manager_id, department_id) -- 한줄마다 결과가 나야하니까 107개가 나옴. 3값중에서 제일 큰 값
 from employees;
 
+select least(2 ,0,-2)
+		,least(4,3.2,5.25)
+        ,least('B','A','C','c')
+from dual;
+
 -- 단일행 함수 > 문자함수
+-- CONCAT(str1, str2, ..., strn): str1, str2, ..., strn을 연결
 select concat('안녕','하세요')
 	from dual;
     
@@ -271,21 +283,37 @@ select first_name
 from employees;
 
 -- 문자개수
-select first_name
-		,length('a')
+select 	first_name,
+		length(first_name),
+        char_length(first_name),
+        character_length(first_name)
+from employees;
+
+select 	length('a')
         ,char_length('a')
         ,character_length('a')
-from employees;
+from dual;
 
 
-select first_name
-		,length('가')
+select 	length('가')
         ,char_length('가')
         ,character_length('가')
-from employees;
+from dual;
 
--- select substr(){
--- }
+-- SUBSTRING(str, pos, len) 또는 SUBSTR(str, pos, len):
+select first_name,
+		substr(first_name, 1, 3)
+        ,substr(first_name, 2, 2)
+        ,substr(first_name, -3, 2)
+from employees
+where department_id = 100;
+
+select 	substr('901112-1234567', 8, 1),     -- 성별  
+ 	    substr('901112-1234567', -7, 1),    -- 성별 뒤에서 계산
+        substr('901112-1234567', 1, 2),     -- 년도
+        substr('901112-1234567', 3, 2),     -- 월  
+        substr('901112-1234567', 5, 2)      -- 일
+from dual;
 
 -- LPAD(str, len, padstr): PRAD(str,len,padstr) 왼쪽에 빈 공간을 *로 채우기 글자수맞춰서
 select first_name 
@@ -307,8 +335,6 @@ select  first_name
 from employees
 where department_id = 100;
 
-
--- 숫자 문자 날짜
 -- 단일행 함수 > 날짜 함수
 select current_date(), curdate();
 select current_time(), curtime();
@@ -316,6 +342,7 @@ select current_timestamp(), now();
 
 -- 시간은 숫자로 저장이 되어서 계산이 됨. 
 
+-- 날짜 시간 계산 함수
 select adddate('2021-06-20 00:00:00', INTERVAL 1 YEAR), 
 		adddate('2021-06-20 00:00:00', INTERVAL 1 MONTH), 
 		adddate('2021-06-20 00:00:00', INTERVAL 1 WEEK), 
@@ -334,23 +361,52 @@ select subdate('2021-06-20 00:00:00', INTERVAL 1 YEAR),
 		adddate('2021-06-20 00:00:00', INTERVAL 1 SECOND)
 ; 
 
---  TIMEDIFF(): 두 날짜시간 간 시간차
-
--- select datedf sesit
+-- DATEDIFF(): TIMEDIFF():  두 날짜시간 간 시간차
+select	datediff('2021-06-21 01:05:05', '2021-06-21 01:00:00'),	
+		timediff('2021-06-21 01:05:05', '2021-06-19 01:00:00')
+from dual;
+select 	first_name,
+		hire_date,
+        round(datediff(now(), hire_date)/365, 1) workday
+from employees
+order by workday desc;
 
 -- 변환함수
 --  DATE_FORMAT(date, format): date를 format형식으로 변환
-
-select now()
-		,date_format(now(), '%y-%m-%d %H:%s')
+select 	now(),
+		date_format(now(), '%y-%m-%d %H:%i:%s' ),
+        date_format(now(), '%Y-%m-%d(%a) %H:%i:%s %p')
 from dual;
 
 
 -- STR_TO_DATE(str, format) : str을 format형식으로 변환
-select datediff('2021-June-04' , '2021-6-01'); -- 형식이 달라서 계산이 인된
+-- 날짜 모양의 문잘열을 날짜형으로 인식하지 못해 -가 계산되지 않는다
+select datediff('2021-June-04' , '2021-6-01'); -- 형식이 달라서 계산이 인됨
 
--- Fotmat(숫자, p):숫자에 콤마(,)를
-select first_name, ifnull(commision_pct, '없음')
+-- '2021-Jun-04'을 '%Y-%b-%d' 형식으로 해석해서 올바른 날짜형으로 반환
+select str_to_date('2021-Jun-04', '%Y-%b-%d')
+from dual;
+
+-- '2021-06-01', '%Y-%m-%d' 형식으로 해석해서 올바른 날짜형으로 반환
+select str_to_date('2021-06-01', '%Y-%m-%d')
+from dual;
+
+-- 각각의 문자열을 날짜형으로 변환시켜서 계산함
+select datediff(str_to_date('2021-Jun-04', '%Y-%b-%d'), str_to_date('2021-06-01', '%Y-%m-%d')) 
+from dual;
+
+-- 상식선의 날짜표시인 경우 그냥 계산된다
+select datediff('2021-06-04', '2021/06/01')
+from dual;
+
+-- FORMAT(숫자, p): 숫자에 콤마(,) 를 추가, 소수점 p자리까지 출력
+select  format(1234567.89, 2),
+		format(1234567.89, 0),
+        format(1234567.89, -2)
+from dual;
+
+-- ifnull() 값이 null일때 기본값 세팅
+select first_name, ifnull(commission_pct, 0)
 from employees;
 
 

@@ -33,7 +33,12 @@ from employees;
 select first_name, last_name, salary, phone_number, email, hire_date
 from employees;
 
--- 컬럼이름 지정
+-- 출력할때 컬럼에 별명 사용하기
+# 직원아이디, 이름, 월급을 출력하세요. 단 직원 아이디는 empNO, 이름은 "f-name", 월급은 "월 급"으로 컬럼명을 출력하세요
+select employee_id empNO
+		,first_name "f-name"
+        ,salary "월 급"
+from employees;
 
 /*직원의 이름(fisrt_name)과 전화번호, 입사일, 월급 으로 표시되도록 출력하세요*/
 select  first_name 이름,
@@ -45,7 +50,7 @@ from employees;
 /* 직원아이디를 사 번, 이름(first_name), 성(last_name), 월급, 전화번호, 이메일,
 입사일로 표시되도록 출력하세요*/
 
-select employee_id 사번,
+select employee_id '사 번',
 		first_name 이름,
         last_name 성,
         salary 월급,
@@ -92,6 +97,7 @@ from dual;
 select 123*5;
 
 -- where절
+#부서번호가 10인 사원의 이름을 구하시오
 select first_name, department_id
 from employees
 where department_id = 10;
@@ -136,6 +142,7 @@ from employees
 where hire_date>='04/01/01'
 and hire_date<='05/12/31';
 
+-- between 연산자로 특정구간 값 출력하기
 #월급이 14000 이상 17000이하인 사원의
 #이름과 월급을 구하시오
 
@@ -150,6 +157,7 @@ select first_name,
 from employees
 where salary between 14000 and 17000;
 
+-- in 연산자로 여러조건을 검사하기
  #Neena, Lex, John 의 이름, 성, 월급을 구하시오
  select first_name,
 		last_name,
@@ -173,6 +181,7 @@ select first_name,
 from employees
 where salary in(2100 , 3100, 4100, 5100)
 ;
+
 select first_name,
 	   salary
 from employees
