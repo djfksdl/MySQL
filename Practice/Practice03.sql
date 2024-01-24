@@ -148,23 +148,41 @@ where j.job_id = 'AC_ACCOUNT';
 (11건)*/
 
 -- department, employee, location, countries, region
-select d.department_id
+(select d.department_id
 		,d.department_name	
-        ,m.first_name manager_name
+       -- ,m.first_name manager_name
         ,l.city
         ,c.country_name
         ,r.region_name
-from locations l
-	left outer join departments d
-		on l.location_id = d.location_id
-	left outer join employees e
+from  departments d
+	left join employees e 
 		on d.department_id = e.department_id
-	left outer join countries c
-		on l.country_id = c.country_id
-	left outer join regions r
-		on c.region_id = r.region_id
-	left outer join employees m
-		on e.manager_id = m.employee_id;
+	/*inner join employees m
+		on e.employee_id = m.employee_id*/
+	left join locations l
+		on d.location_id = l.location_id
+	left join countries c
+		on c.country_id = l.country_id
+	left join regions r
+		on c.region_id = r.region_id)
+union
+(select d.department_id
+		,d.department_name	
+       -- ,m.first_name manager_name
+        ,l.city
+        ,c.country_name
+        ,r.region_name
+from  departments d
+	right join employees e 
+		on d.department_id = e.department_id
+	/*inner join employees m
+		on e.employee_id = m.employee_id*/
+	right join locations l
+		on d.location_id = l.location_id
+	right join countries c
+		on c.country_id = l.country_id
+	right join regions r
+		on c.region_id = r.region_id);
     
 
 /*문제9.
@@ -185,12 +203,29 @@ from employees e
 		on e.manager_id = m.employee_id ;
 
 /*문제9-1.
-문제9 에서 부서가 없는 직원(Kimberely)도 표시하고.
+문제9 에서 부서가 없는 직원(Kimberely)는 표시하고.
 매니저가 없는 Steven도 표시하지 않습니다.
 (106명)*/
-
-
+select e.employee_id
+		,e.first_name
+        ,d.department_name
+        ,m.first_name manager_first_name
+from  employees e
+	left outer join departments d
+		on e.department_id = d.department_id
+	inner join employees m
+		on e.manager_id = m.employee_id ;
+        
 /*문제9-2.
 문제9 에서 부서가 없는 직원(Kimberely)도 표시하지 않고
 매니저가 없는 Steven도 표시하지 않습니다.
 (105명)*/
+select e.employee_id
+		,e.first_name
+        ,d.department_name
+        ,m.first_name manager_first_name
+from  departments d
+	left outer join employees e
+		on e.department_id = d.department_id
+	inner join employees m
+		on e.manager_id = m.employee_id ;
