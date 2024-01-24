@@ -212,18 +212,35 @@ where e.department_id = d.department_id
 and e.job_id = j.job_id ;
 
 -- 이름, 부서번호, 부서명, 업무아이디, 업무명, 도시아이디, 도시명
+-- 직원(이름, 부서번호, 업무아이디)
+-- 부서(부서번호, 부서명)
+-- 업무(업무아이디, 업무명, 도시 아이디)
+-- 도시(도시아이디, 도시명)
 
 select e.first_name
-	,e.department_id
+	,e.department_id -- 같이 매칭시켜서 어차피 같은거임. 둘중에 하나만 써줘도 된다.
+    ,d.department_name -- 같이 매칭시켜서 어차피 같은거임. 둘중에 하나만 써줘도 된다.
+    ,e.job_id
+    ,j.job_title
+    ,d.location_id
+    ,l.location_id
+    ,l.city
+from employees e, departments d, locations l, jobs j 
+where e.department_id = d.department_id
+and d.location_id = l.location_id
+and e.job_id = j.job_id;
+
+
+select  e.first_name
+	,e.department_id 
     ,d.department_name
     ,e.job_id
     ,j.job_title
+    ,d.location_id
     ,l.location_id
     ,l.city
 from employees e
-inner join departments d
-	on e.department_id = d.department_id
-inner join jobs j
-	on e.job_id = j.job_id
-inner join locations l
-	on d.location_id = l.country_id;
+inner join departments d on e.department_id = d.department_id
+inner join jobs j on e.job_id = j.job_id
+inner join locations l on d.location_id = l.location_id;
+
