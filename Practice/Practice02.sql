@@ -31,7 +31,7 @@ from employees
 group by department_id
 order by department_id desc;
 
-/*문제5. -- ?
+/*문제5.
 업무(job_id)별로 평균임금, 최고임금, 최저임금을 업무아이디(job_id)와 함께 출력하고 정렬
 순서는 최저임금 내림차순, 평균임금(소수점 반올림), 오름차순 순입니다.
 (정렬순서는 최소임금 2500 구간일때 확인해볼 것)*/

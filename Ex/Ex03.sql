@@ -67,7 +67,7 @@ select count(*)
         ,min(salary)
 from employees;
 
-select max(salary) , first_name -- 을 쓰면 갯수가 1개 107개라 안나옴. 최대 salary를 받는 사람 이름은 나중 방법으로 같이 구할 수 있음. 
+select max(salary) , first_name -- 을 쓰면 갯수가 1개, 107개라 안나옴. 최대 salary를 받는 사람 이름은 나중 방법으로 같이 구할 수 있음. 
 from employees;
 
 -- -------------------------------------------------
