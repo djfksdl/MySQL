@@ -109,10 +109,8 @@ order by hire_date asc;
 
 # 필요한 함수
 /* 
-select date_format(min(hire_date), '%Y년%m월%일 (%토요일)') 
-from employees;
-
-date_format(날짜 , 바꿀 날짜 형식)
-min() : ()안에 컬럼값 넣기
+SELECT hire_date, SUBSTR('일월화수목금토', DAYOFWEEK(hire_date), 1) AS week FROM employees;
 */
-
+select 
+		date_format(min(hire_date), '%Y-%m-%d' SUBSTR('일월화수목금토', DAYOFWEEK(min(hire_date)), 1))AS week
+from employees;
