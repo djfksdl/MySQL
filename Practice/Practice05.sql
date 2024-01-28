@@ -63,6 +63,8 @@ from employees;
 -출력내용은 매니저아이디, 매니저이름(first_name), 매니저별평균월급, 매니저별최소월급, 매
 니저별최대월급 입니다.
 (9건)*/
+select *
+from employees;
 
 /*문제4.
 각 사원(employee)에 대해서 사번(employee_id), 이름(first_name), 부서명
