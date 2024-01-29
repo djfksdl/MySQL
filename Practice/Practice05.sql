@@ -54,7 +54,7 @@ order by salary desc;
 select * 
 from employees;
 
-/*문제3
+/*문제3 
 매니저별 담당직원들의 평균월급 최소월급 최대월급을 알아보려고 한다.
 -통계대상(직원)은 2005년 이후(2005년 1월 1일 ~ 현재)의 입사자 입니다.
 -매니저별 평균월급이 5000이상만 출력합니다.
@@ -63,26 +63,82 @@ from employees;
 -출력내용은 매니저아이디, 매니저이름(first_name), 매니저별평균월급, 매니저별최소월급, 매
 니저별최대월급 입니다.
 (9건)*/
-select *
-from employees;
+select 	e.manager_id
+		,m.first_name
+		,round(avg(m.salary),0) aSalary
+        ,max(m.salary)
+        ,min(m.salary)
+from employees e , employees m
+where e.manager_id = m.employee_id
+and m.hire_date >='2005/01/01'
+group by e.manager_id
+having aSalary>=5000
+order by aSalary desc;
 
-/*문제4.
+/*문제4. ??
 각 사원(employee)에 대해서 사번(employee_id), 이름(first_name), 부서명
 (department_name), 매니저(manager)의 이름(first_name)을 조회하세요.
 부서가 없는 직원(Kimberely)도 표시합니다.
 (106명)*/
+select	e.employee_id
+		,e.first_name
+        ,d.department_name
+        ,m.first_name manager_name
+from employees e left join departments d
+				on e.department_id = d.department_id
+                left join employees m
+                on e.manager_id = m.employee_id ;
 
 /*문제5.
 2005년 이후 입사한 직원중에 입사일이 11번째에서 20번째의 직원의
 사번, 이름, 부서명, 월급, 입사일을 입사일 순서로 출력하세요*/
+select employee_id
+		,first_name
+        ,salary
+        ,hire_date
+from employees
+where hire_date >= '2005/01/01'
+order by hire_date asc
+limit 11,10;
 
-/*문제6.
+/*문제6.  ??
 가장 늦게 입사한 직원의 이름(first_name last_name)과 월급(salary)과 근무하는 부서 이름
 (department_name)은?*/
+select concat(first_name ,' ',last_name) 'first_name last_name'
+		,e.salary
+        ,d.department_name
+from employees e, departments d
+where e.department_id = d.department_id
+and max(hire_date);
 
-/*문제7.
+select first_name
+from employees
+where min(hire_date);
+
+/*문제7. ??
 평균월급(salary)이 가장 높은 부서 직원들의 직원번호(employee_id), 이름(firt_name), 성
 (last_name)과 업무(job_title), 월급(salary)을 조회하시오.*/
+-- 평균월급이 가장 높은 부서
+select	max(avg(salary))
+from employees
+group by department_id;
+
+select department_id
+		,max(salary)
+from employees
+group by department_id;
+
+-- 틀
+select employee_id
+		,first_name
+        ,last_name
+        ,job_title
+        ,salary
+from employees e, jobs j
+where  e.job_id = j.job_id
+and department_id = (평균월급이 가장 높은 부서);
+
+-- 합치기
 
 /*문제8.
 평균 월급(salary)이 가장 높은 부서명과 월급은? (limt사용하지 말고 그룹함수 사용할 것)*/
