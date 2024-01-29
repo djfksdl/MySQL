@@ -80,6 +80,8 @@ order by aSalary desc;
 (department_name), 매니저(manager)의 이름(first_name)을 조회하세요.
 부서가 없는 직원(Kimberely)도 표시합니다.
 (106명)*/
+
+-- d null 포함 . m null포함 생략 e는 기준 
 select	e.employee_id
 		,e.first_name
         ,d.department_name
@@ -88,6 +90,7 @@ from employees e left join departments d
 				on e.department_id = d.department_id
                 left join employees m
                 on e.manager_id = m.employee_id ;
+
 
 /*문제5.
 2005년 이후 입사한 직원중에 입사일이 11번째에서 20번째의 직원의
