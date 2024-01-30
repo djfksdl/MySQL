@@ -75,20 +75,20 @@ group by e.manager_id
 having aSalary>=5000
 order by aSalary desc;
 
-/*문제4. ??
+/*문제4.
 각 사원(employee)에 대해서 사번(employee_id), 이름(first_name), 부서명
 (department_name), 매니저(manager)의 이름(first_name)을 조회하세요.
 부서가 없는 직원(Kimberely)도 표시합니다.
 (106명)*/
 
--- d null 포함 . m null포함 생략 e는 기준 
+-- d null 포함 . m null값 생략, e nullx
 select	e.employee_id
 		,e.first_name
         ,d.department_name
         ,m.first_name manager_name
 from employees e left join departments d
 				on e.department_id = d.department_id
-                left join employees m
+                inner join employees m
                 on e.manager_id = m.employee_id ;
 
 
@@ -104,19 +104,30 @@ where hire_date >= '2005/01/01'
 order by hire_date asc
 limit 11,10;
 
-/*문제6.  ??
+/*문제6. 
 가장 늦게 입사한 직원의 이름(first_name last_name)과 월급(salary)과 근무하는 부서 이름
 (department_name)은?*/
-select concat(first_name ,' ',last_name) 'first_name last_name'
+
+-- 가장 늦게 입사한 날짜
+select 	max(hire_date)
+from employees;
+
+-- 가장 늦게 입사한 직원의 이름, 월급, 부서 틀
+select concat(e.first_name ,' ', e.last_name) 'first_name last_name'
 		,e.salary
         ,d.department_name
 from employees e, departments d
-where e.department_id = d.department_id
-and max(hire_date);
+where hire_date in (가장늦게입사한 날짜)
+and e.department_id = d.department_id;
 
-select first_name
-from employees
-where min(hire_date);
+-- 합치기
+select concat(e.first_name ,' ', e.last_name) 'first_name last_name'
+		,e.salary
+        ,d.department_name
+from employees e, departments d
+where hire_date in (select 	max(hire_date)
+					from employees)
+and e.department_id = d.department_id;
 
 /*문제7. ??
 평균월급(salary)이 가장 높은 부서 직원들의 직원번호(employee_id), 이름(firt_name), 성
