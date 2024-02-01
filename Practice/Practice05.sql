@@ -129,36 +129,86 @@ where hire_date in (select 	max(hire_date)
 					from employees)
 and e.department_id = d.department_id;
 
-/*문제7. ??
+/*문제7.
 평균월급(salary)이 가장 높은 부서 직원들의 직원번호(employee_id), 이름(firt_name), 성
 (last_name)과 업무(job_title), 월급(salary)을 조회하시오.*/
--- 평균월급이 가장 높은 부서
-select	max(avg(salary))
-from employees
-group by department_id;
 
+-- 평균월급이 가장 높은 부서
 select department_id
-		,max(salary)
+		-- ,avg(salary)
 from employees
-group by department_id;
+group by department_id
+order by avg(salary) desc
+limit 1;
 
 -- 틀
-select employee_id
+select e.employee_id
 		,first_name
         ,last_name
         ,job_title
         ,salary
-from employees e, jobs j
-where  e.job_id = j.job_id
-and department_id = (평균월급이 가장 높은 부서);
+        ,(최고 평균월급)
+from employees e left join jobs j
+				 on e.employee_id = j.employee_id
+where department_id = (평균월급이 가장 높은 부서);
+
+-- 합치기                             
+select 	e.employee_id 사번
+		,first_name 성
+        ,last_name 이름
+        ,job_title 업무명
+        ,salary 월급
+        ,(select avg(salary)
+			from employees
+			group by department_id
+			order by avg(salary) desc
+			limit 1) 부서평균월급
+		,department_id '부서 아이디'
+from employees e left join jobs j
+				on e.job_id = j.job_id
+where department_id  = (select department_id
+							 from employees
+							 group by department_id
+							 order by avg(salary) desc
+							 limit 1);
+
+/*문제8. ??
+평균 월급(salary)이 가장 높은 부서명과 월급은? (limt사용하지 말고 그룹함수 사용할 것)*/
+
+-- 부서별 평균월급
+select avg(salary) aSalary
+from employees
+group by department_id;
+
+-- 평균월급중 최고 월급
+select 	max(aSalary) avgSalary
+from (select department_id
+			,avg(salary) aSalary
+		from employees
+		group by department_id) a;
+
+-- 평균월급중 최고 월급인 부서
+select 	department_name
+		,avgSalary
+from departments d , (평균월급중 최고월급 서브쿼리)
+where d.department_id = (평균월급중 최고월급 서브쿼리).department_id;
 
 -- 합치기
+select 	department_name
+		,avgSalary
+from departments d , (select 	a.department_id
+								,max(aSalary) avgSalary
+					 from (select department_id
+									,avg(salary) aSalary
+									from employees
+									group by department_id) a
+                                    group by department_id) s
+where d.department_id = s.department_id;
 
-/*문제8.
-평균 월급(salary)이 가장 높은 부서명과 월급은? (limt사용하지 말고 그룹함수 사용할 것)*/
 
 /*문제9.
 평균 월급(salary)이 가장 높은 지역과 평균월급은?*/
+-- 평균월급이 가장 높은 부서
 
 /*문제10.
 평균 월급(salary)이 가장 높은 업무와 평균월급은? (limt사용하지 말고 그룹함수 사용할 것)*/
