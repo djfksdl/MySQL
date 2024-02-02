@@ -172,7 +172,7 @@ where department_id  = (select department_id
 							 order by avg(salary) desc
 							 limit 1);
 
-/*문제8.
+/*문제8. ??
 평균 월급(salary)이 가장 높은 부서명과 월급은? (limt사용하지 말고 그룹함수 사용할 것)*/
 
 -- 부서별 평균월급
