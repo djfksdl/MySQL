@@ -254,5 +254,11 @@ limit 1;
 
 /*문제10. ??
 평균 월급(salary)이 가장 높은 업무와 평균월급은? (limt사용하지 말고 그룹함수 사용할 것)*/
+-- 평균 월급
+select avg(salary)
+from employees;
 
+-- 평균월급중 가장 높은 업무와 평균 월급
+select * 
+from employees;
 
