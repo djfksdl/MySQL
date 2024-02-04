@@ -259,6 +259,7 @@ select avg(salary)
 from employees;
 
 -- 평균월급중 가장 높은 업무와 평균 월급
-select * 
-from employees;
+select avg(salary) aSalary
+from employees
+where aSalary = ()가장 높은 평균월급);
 
