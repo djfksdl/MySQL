@@ -209,7 +209,7 @@ on d.department_id = s.department_id
 where aSalary = (평균월급중 최고 월급);
 
 
-/*문제9.
+/*문제9. -- 방법2
 평균 월급(salary)이 가장 높은 지역과 평균월급은?*/
 -- 방법1
 -- 가장 높은 평균월급
