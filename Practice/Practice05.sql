@@ -172,7 +172,7 @@ where department_id  = (select department_id
 						order by avg(salary) desc
 						limit 1);
 
-/*문제8. ??
+/*문제8.
 평균 월급(salary)이 가장 높은 부서명과 월급은? (limt사용하지 말고 그룹함수 사용할 것)*/
 
 -- 부서별 평균월급
@@ -185,47 +185,43 @@ select 	max(aSalary) mSalary
 from (select department_id
 			,avg(salary) aSalary
 	  from employees
-	  group by department_id) a;
+	  group by department_id) mTable;
 
--- 평균월급중 최고 월급인 부서
 -- 틀
-select	department_id
-from employees 
-where 평균월급 = (평균월급중 최고월급);
-
--- 합치기
-select	department_id
-		,avg(salary) aSalary
-from employees
-where aSalary = ()
-group by department_id;
+select 	department_name
+		,aSalary
+from departments d join (select department_id
+								,avg(salary) aSalary
+						from employees
+						group by department_id) aTable
+on d.department_id = aTable.department_id
+where aSalary = (select 	max(aSalary) mSalary
+				from (select department_id
+							,avg(salary) aSalary
+					 from employees
+					 group by department_id) mTable);
 
 -- 합치기
 select 	department_name
-		,avgSalary
-from departments d , (select 	a.department_id
-								,max(aSalary) avgSalary
-					 from (select department_id
-									,avg(salary) aSalary
-									from employees
-									group by department_id) a
-                                    group by department_id) s
-where d.department_id = s.department_id;
+		,aSalary
+from departments d join (평균월급 테이블) aTable
+on d.department_id = s.department_id
+where aSalary = (평균월급중 최고 월급);
 
 
 /*문제9.
 평균 월급(salary)이 가장 높은 지역과 평균월급은?*/
--- 평균월급이 가장 높은 부서--- 가 아닌가?
--- select 	department_id
--- 		,avg(salary) aSalary
+-- 방법1
+-- 가장 높은 평균월급
+-- select avg(salary)
 -- from employees
 -- group by department_id
--- order by avg(salary) desc;
+-- order by avg(salary) desc
 -- limit 1;
 
--- 평균월급이 가장 높은 부서의 지역
--- select 	avg(salary) aSalary
--- 		,r.region_name
+-- 틀
+-- select	region_name
+-- 		,avg(salary) aSalary
 -- from employees e join departments d
 -- 				on e.department_id = d.department_id
 -- 				join locations l
@@ -233,10 +229,33 @@ where d.department_id = s.department_id;
 --                 join countries c
 --                 on l.country_id = c.country_id
 --                 join regions r
---                 on c.region_id = r.region_id
--- where department_id = (평균월급이 가장 높은 부서); 
+--                 on c.region_id = r.region_id 
+-- where e.aSalary =(평균월급 가장 높은 부서 아이디);
 
 -- 합치기
+-- select	region_name
+-- 		,aSalary
+-- from employees e join departments d
+-- 				on e.department_id = d.department_id
+-- 				join locations l
+--                 on d.location_id = l.location_id
+--                 join countries c
+--                 on l.country_id = c.country_id
+--                 join regions r
+--                 on c.region_id = r.region_id 
+--                 join (select avg(salary) aSalary
+-- 					  from employees
+-- 					  group by department_id
+-- 					  order by avg(salary) desc
+-- 					  limit 1) atable
+--                 on r.region_id = atable.region_id
+-- where aSalary =(select avg(salary)
+-- 					  from employees
+-- 					  group by department_id
+-- 					  order by avg(salary) desc
+-- 					  limit 1);
+
+-- 방법2
 select 	avg(e.salary) 
 		,r.region_name
 from employees e join departments d
@@ -252,14 +271,38 @@ order by avg(salary) desc
 limit 1;
 
 
-/*문제10. ??
+/*문제10. 
 평균 월급(salary)이 가장 높은 업무와 평균월급은? (limt사용하지 말고 그룹함수 사용할 것)*/
--- 평균 월급
-select avg(salary)
-from employees;
-
--- 평균월급중 가장 높은 업무와 평균 월급
-select avg(salary) aSalary
+-- 평균월급
+select 	job_id
+		,avg(salary)
 from employees
-where aSalary = ()가장 높은 평균월급);
+group by job_id;
 
+-- 가장 높은 평균월급
+select 	max(aSalary) mSalary
+from (select 	job_id
+				,avg(salary) aSalary
+	 from employees
+	 group by job_id) aTable;
+     
+-- 틀
+select 	job_title
+		,aSalary
+from (평균월급 테이블) aTable join jobs j
+on aTable.job_id = j.job_id
+where aSalary = (가장높은 평균월급 서브쿼리);
+     
+-- 합치기
+select 	job_title
+		,aSalary
+from (select 	job_id
+				,avg(salary) aSalary
+	 from employees
+	 group by job_id) aTable join jobs j
+on aTable.job_id = j.job_id
+where aSalary = (select 	max(aSalary) mSalary
+				from (select 	job_id
+								,avg(salary) aSalary
+					 from employees
+					 group by job_id) aTable);
