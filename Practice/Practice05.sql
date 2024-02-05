@@ -209,53 +209,8 @@ on d.department_id = s.department_id
 where aSalary = (평균월급중 최고 월급);
 
 
-/*문제9. -- 방법2
+/*문제9.
 평균 월급(salary)이 가장 높은 지역과 평균월급은?*/
--- 방법1
--- 가장 높은 평균월급
--- select avg(salary)
--- from employees
--- group by department_id
--- order by avg(salary) desc
--- limit 1;
-
--- 틀
--- select	region_name
--- 		,avg(salary) aSalary
--- from employees e join departments d
--- 				on e.department_id = d.department_id
--- 				join locations l
---                 on d.location_id = l.location_id
---                 join countries c
---                 on l.country_id = c.country_id
---                 join regions r
---                 on c.region_id = r.region_id 
--- where e.aSalary =(평균월급 가장 높은 부서 아이디);
-
--- 합치기
--- select	region_name
--- 		,aSalary
--- from employees e join departments d
--- 				on e.department_id = d.department_id
--- 				join locations l
---                 on d.location_id = l.location_id
---                 join countries c
---                 on l.country_id = c.country_id
---                 join regions r
---                 on c.region_id = r.region_id 
---                 join (select avg(salary) aSalary
--- 					  from employees
--- 					  group by department_id
--- 					  order by avg(salary) desc
--- 					  limit 1) atable
---                 on r.region_id = atable.region_id
--- where aSalary =(select avg(salary)
--- 					  from employees
--- 					  group by department_id
--- 					  order by avg(salary) desc
--- 					  limit 1);
-
--- 방법2
 select 	avg(e.salary) 
 		,r.region_name
 from employees e join departments d
